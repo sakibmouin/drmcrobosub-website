@@ -1,28 +1,48 @@
 ---
-import { Icon } from 'astro-icon/components';
+import '@/assets/styles/tailwind.css';
 
-import { UI } from 'astrowind:config';
+// import { Icon } from 'astro-icon/components';
 
-export interface Props {
-  label?: string;
-  class?: string;
-  iconClass?: string;
-  iconName?: string;
-}
+// import { UI } from 'astrowind:config';
 
-const {
-  label = 'Toggle between Dark and Light mode',
-  class:
-    className = 'text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center',
-  iconClass = 'w-6 h-6',
-  iconName = 'tabler:sun',
-} = Astro.props;
+// export interface Props {
+//   label?: string;
+//   class?: string;
+//   iconClass?: string;
+//   iconName?: string;
+// }
+
+// const {
+//   label = 'Toggle between Dark and Light mode',
+//   class:
+//     className = 'text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center',
+//   iconClass = 'w-6 h-6',
+//   iconName = 'tabler:sun',
+// } = Astro.props;
 ---
 
-{
+<!-- {
   !(UI.theme && UI.theme.endsWith(':only')) && (
     <button type="button" class={className} aria-label={label} data-aw-toggle-color-scheme>
       <Icon name={iconName} class={iconClass} />
     </button>
   )
-}
+} -->
+<script is:inline>
+  const getThemePreference = () => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  const isDark = getThemePreference() === 'dark';
+  document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+
+  if (typeof localStorage !== 'undefined') {
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  }
+</script>
