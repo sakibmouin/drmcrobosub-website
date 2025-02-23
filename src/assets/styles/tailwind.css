@@ -184,6 +184,9 @@
     --ring: 0 0% 22.745098039215687%;
     --radius: 0.5rem;
   }
+  html {
+    font-family: 'Hanken Grotesk Variable', system-ui, sans-serif;
+  }
 }
 
 @layer base {
